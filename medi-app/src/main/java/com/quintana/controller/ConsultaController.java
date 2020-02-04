@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,52 +18,47 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.quintana.exception.ModeloNotFoundException;
-import com.quintana.model.Medico;
-import com.quintana.model.Paciente;
-import com.quintana.service.IMedicoService;
+import com.quintana.model.Consulta;
+import com.quintana.service.IConsultaService;
 
 @RestController
-@RequestMapping("/medico")
-public class MedicoController {
-	
-	@Autowired
-	private IMedicoService service;
-	
+@RequestMapping("/consulta")
+public class ConsultaController {
+
+	IConsultaService service;
+
 	@PostMapping
-	public ResponseEntity<Object> registrar(@Valid @RequestBody Medico obj) {
-		Medico med = service.registrar(obj);
-		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(med.getId()).toUri();
+	public ResponseEntity<Object> registrar(@Valid @RequestBody Consulta obj) {
+		Consulta con = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(con.getIdConsulta()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 
 	@PutMapping
-	public ResponseEntity<Medico> modificar(@Valid @RequestBody Medico obj) {
-		Medico med = service.modificar(obj);
-		return new ResponseEntity<Medico>(med, HttpStatus.OK);
+	public ResponseEntity<Consulta> modificar(@Valid @RequestBody Consulta obj) {
+		Consulta con = service.modificar(obj);
+		return new ResponseEntity<Consulta>(con, HttpStatus.OK);
 
 	}
-	
-	// Creamos un metodo con la anotacion @GetMapping para traer de la capa
-	// IMedicoService el metodo listas
+
 	@GetMapping
-	public ResponseEntity<List<Medico>> listar() {
-		List<Medico> lista = service.listar();
-		return new ResponseEntity<List<Medico>>(lista, HttpStatus.OK);
+	public ResponseEntity<List<Consulta>> listar() {
+		List<Consulta> ls = service.listar();
+		return new ResponseEntity<List<Consulta>>(ls, HttpStatus.OK);
 	}
-
 	
 	// Renombramos la url ya que si no saldria un error de ambiguedad a la hora de
 	// realizar la petición ya que ya tenemos otro @GetMapping
 	// Ademas se debe colocar @PathVariable("id") con el mismo nombre de la variable
 	// @GetMapping
 	@GetMapping("/{id}")
-	public ResponseEntity<Medico> listarPorId(@PathVariable("id") Integer id) {
-		Medico obj = service.listarPorId(id);
-		if (obj.getId() == null) {
+	public ResponseEntity<Consulta> listarPorId(@PathVariable("id") Integer id) {
+		Consulta obj = service.listarPorId(id);
+		if (obj.getIdConsulta() == null) {
 			throw new ModeloNotFoundException("ID No Encontrado : " + id);
 		}
-		return new ResponseEntity<Medico>(obj, HttpStatus.OK);
+		return new ResponseEntity<Consulta>(obj, HttpStatus.OK);
 	}
 
 	
@@ -73,6 +67,5 @@ public class MedicoController {
 		service.eliminar(id);
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
-
 
 }

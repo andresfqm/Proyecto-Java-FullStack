@@ -13,7 +13,7 @@ public class Medico {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer idMedico;
 	
 	@Column(name = "nombres", nullable = false, length = 70)
 	private String nombres;
@@ -30,16 +30,23 @@ public class Medico {
 	
 	// Getter and Setter
 	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getNombres() {
 		return nombres;
+	}
+
+	/**
+	 * @return the idMedico
+	 */
+	public Integer getIdMedico() {
+		return idMedico;
+	}
+
+	/**
+	 * @param idMedico the idMedico to set
+	 */
+	public void setIdMedico(Integer idMedico) {
+		this.idMedico = idMedico;
 	}
 
 	public void setNombres(String nombres) {

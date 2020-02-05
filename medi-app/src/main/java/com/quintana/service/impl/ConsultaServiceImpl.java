@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.quintana.dto.ConsultaListaExamenDTO;
 import com.quintana.model.Consulta;
 import com.quintana.repo.IConsultaExamenRepo;
 import com.quintana.repo.IConsultaRepo;
@@ -15,6 +17,9 @@ public class ConsultaServiceImpl implements IConsultaService{
 
     @Autowired
 	private IConsultaRepo repo;
+    
+	@Autowired
+	private IConsultaExamenRepo ceRepo;
 	
   //  @Autowired
   //  private IConsultaExamenRepo ceRepo;
@@ -25,6 +30,20 @@ public class ConsultaServiceImpl implements IConsultaService{
 			det.setConsulta(obj);
 		});
 		return repo.save(obj);
+	}
+	
+	@Transactional
+	@Override
+	public Consulta registrarTransaccional(ConsultaListaExamenDTO dto) {
+		dto.getConsulta().getDetalleConsulta().forEach(det -> {
+			det.setConsulta(dto.getConsulta());
+		});
+		repo.save(dto.getConsulta());
+		
+		dto.getLstExamen().forEach(ex -> ceRepo.consultaexamen(dto.getConsulta().getIdConsulta(), ex.getIdExamen()));
+		
+		return dto.getConsulta();
+		
 	}
 
 	@Override

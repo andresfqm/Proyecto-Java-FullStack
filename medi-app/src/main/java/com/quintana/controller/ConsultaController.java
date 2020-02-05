@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,19 +18,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.quintana.dto.ConsultaListaExamenDTO;
 import com.quintana.exception.ModeloNotFoundException;
 import com.quintana.model.Consulta;
 import com.quintana.service.IConsultaService;
 
 @RestController
-@RequestMapping("/consulta")
+@RequestMapping("/consultas")
 public class ConsultaController {
 
+	@Autowired
 	IConsultaService service;
 
+	/*
 	@PostMapping
 	public ResponseEntity<Object> registrar(@Valid @RequestBody Consulta obj) {
 		Consulta con = service.registrar(obj);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(con.getIdConsulta()).toUri();
+		return ResponseEntity.created(location).build();
+	}
+	*/
+	@PostMapping
+	public ResponseEntity<Object> registrar(@Valid @RequestBody ConsultaListaExamenDTO dto) {
+		Consulta con = service.registrarTransaccional(dto);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(con.getIdConsulta()).toUri();
 		return ResponseEntity.created(location).build();

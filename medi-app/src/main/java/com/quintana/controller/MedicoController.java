@@ -34,7 +34,7 @@ public class MedicoController {
 	public ResponseEntity<Object> registrar(@Valid @RequestBody Medico obj) {
 		Medico med = service.registrar(obj);
 		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(med.getId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(med.getIdMedico()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 
@@ -61,7 +61,7 @@ public class MedicoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Medico> listarPorId(@PathVariable("id") Integer id) {
 		Medico obj = service.listarPorId(id);
-		if (obj.getId() == null) {
+		if (obj.getIdMedico() == null) {
 			throw new ModeloNotFoundException("ID No Encontrado : " + id);
 		}
 		return new ResponseEntity<Medico>(obj, HttpStatus.OK);

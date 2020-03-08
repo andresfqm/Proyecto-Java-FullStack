@@ -10,11 +10,12 @@ import com.quintana.model.ConsultaExamen;
 
 public interface IConsultaExamenRepo extends JpaRepository<ConsultaExamen, Integer> {
 
-	@Modifying
-    @Query(value = "INSERT INTO consulta_examen(id_consulta, id_examen) VALUES (:idConsulta, :idExamen)", nativeQuery = true)
-	Integer consultaexamen(@Param("idConsulta") Integer idConsulta, @Param("idExamen") Integer idExamen);
+	
+    //@Query(value = "INSERT INTO consulta_examen(id_consulta, id_examen) VALUES (:idConsulta, :idExamen)", nativeQuery = true)
+	//Integer consultaexamen(@Param("idConsulta") Integer idConsulta, @Param("idExamen") Integer idExamen);
 
-	//@Procedure(name = "consultaExamen")
-	//String consultaexamen(@Param("idConsulta") Integer idConsulta,@Param("idExamen") Integer idExamen);
+	@Modifying
+	@Query(value = "call consultaexamen(:idConsulta, :idExamen)", nativeQuery = true)
+	Integer consultaexamen(@Param("idConsulta") Integer idConsulta,@Param("idExamen") Integer idExamen);
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +26,7 @@ import com.mitocode.model.Signos;
 import com.mitocode.service.ISignoService;
 
 @RestController
-@RequestMapping("/signos")
+@RequestMapping("/signos-vitales")
 public class SignoController {
 	
 	@Autowired
@@ -62,6 +64,12 @@ public class SignoController {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);
 		}
 		return new ResponseEntity<Signos>(obj, HttpStatus.OK);
+	}
+	
+	@GetMapping("/pageable")
+	public ResponseEntity<Page<Signos>> listarPageable(Pageable pageable) {
+		Page<Signos> signos = service.listarPageable(pageable);
+		return new ResponseEntity<Page<Signos>>(signos, HttpStatus.OK);
 	}
 	
 	
